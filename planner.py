@@ -20,6 +20,7 @@ to store prerequisite information.
 TermPlanner: answers queries about schedules based on prerequisite tree.
 """
 from course import Course
+from course_parser import CourseParser
 
 
 def parse_course_data(filename):
@@ -31,7 +32,15 @@ def parse_course_data(filename):
 
     See assignment handout for details.
     """
-    pass
+    parser = CourseParser()
+    # Open the file and add every line to the parser via argument
+    # unpacking. We were told to assume the file is perfectly structured,
+    # so this should work well.
+    with open(filename, 'r') as f:
+        for line in f:
+            parser.add(*[c.strip() for c in line.split(' ')])
+
+    return parser.root()
 
 
 class TermPlanner:

@@ -22,11 +22,14 @@ of this class to be one instance per student (otherwise,
 Course: a course and its prerequisites.
 """
 
+
 class UntakeableError(Exception):
     pass
 
+
 class PrerequisiteError(Exception):
     pass
+
 
 class Course:
     """A tree representing a course and its prerequisites.

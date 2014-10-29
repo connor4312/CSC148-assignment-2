@@ -33,7 +33,7 @@ class TestPlanner(unittest.TestCase):
 
     def test_not_valid_if_dont_take_all(self):
         self.assertFalse(self.planner.is_valid([
-            ['AWE100', 'AWE101', 'AWE250'],
+            ['AWE100', 'AWE101', 'AWE199', 'AWE250'],
             ['AWE200'],
             ['AWE300']
         ]))

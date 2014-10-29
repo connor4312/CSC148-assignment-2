@@ -88,6 +88,12 @@ class TermPlanner:
                 # At this point, it's a valid course, so let's take it.
                 course.take()
 
+        # Then, loop through every course in the tree and make sure
+        # every course that is possible to take has been taken.
+        for course in self.course.flatten():
+            if not course.taken and course.is_takeable():
+                return False
+
         # If we got down to here, we're good!
         return True
 

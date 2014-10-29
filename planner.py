@@ -38,7 +38,9 @@ def parse_course_data(filename):
     # so this should work well.
     with open(filename, 'r') as f:
         for line in f:
-            parser.add(*[c.strip() for c in line.split(' ')])
+            # Each line has to be stripped, as it looks like we can
+            # sometimes get trailing \n's at the end of the line
+            parser.add(*line.strip().split(' '))
 
     return parser.root()
 

@@ -99,6 +99,15 @@ class Course:
 
         return any(p.has_prereq(prereq) for p in self.prereqs)
 
+    def flatten(self):
+        """ (Course) -> list of Course
+        Flattens the tree. Returns a list of all prerequisites of this course
+        (recursively).
+        """
+        # Output a list of the self, and a concat'ed list of all the
+        # flatted prerequisites.
+        return [self] + [n for p in self.prereqs for n in p.flatten()]
+
     def missing_prereqs(self):
         """ (Course) -> list of str
 
@@ -108,4 +117,8 @@ class Course:
         The returned list should be in alphabetical order, and should be empty
         if this course is not missing any prerequisites.
         """
-        return sorted([p.name for p in self.prereqs if not p.taken])
+        # Return a list of the names of courses in this tree, excluding
+        # taken courses and the course itself
+        output = [p.name for p in self.flatten() if not p.taken and p != self]
+
+        return sorted(output)

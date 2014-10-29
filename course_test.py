@@ -76,7 +76,7 @@ class TestCourse(unittest.TestCase):
     def test_missing_prereqs_works(self):
         self.assertEqual([], self.a.missing_prereqs())
         self.assertEqual(['A'], self.c.missing_prereqs())
-        self.assertEqual(['B', 'C'], self.d.missing_prereqs())
+        self.assertEqual(['A', 'B', 'C'], self.d.missing_prereqs())
 
 if __name__ == '__main__':
     unittest.main(exit=False)

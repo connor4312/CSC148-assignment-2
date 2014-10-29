@@ -2,6 +2,11 @@ from course import Course
 
 
 class CourseParser():
+    """
+    The CourseParser is responsible for building course trees. Courses can be
+    added by code to it, with a prerequisite, and they are then built into
+    a proper tree.
+    """
 
     def __init__(self):
         self.courses = {}

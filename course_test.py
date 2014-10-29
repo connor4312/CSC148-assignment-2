@@ -73,6 +73,10 @@ class TestCourse(unittest.TestCase):
         with self.assertRaises(PrerequisiteError):
             self.a.add_prereq(self.c)
 
+    def test_find(self):
+        self.assertEqual(self.a, self.d.find('A'))
+        self.assertEqual(None, self.d.find('G'))
+
     def test_missing_prereqs_works(self):
         self.assertEqual([], self.a.missing_prereqs())
         self.assertEqual(['A'], self.c.missing_prereqs())

@@ -108,6 +108,30 @@ class Course:
         # flatted prerequisites.
         return [self] + [n for p in self.prereqs for n in p.flatten()]
 
+    def count_prereqs(self):
+        """ (Course) -> int
+        Returns the total number of prerequisites that this course has.
+        """
+        count = len(self.prereqs)
+        for p in self.prereqs:
+            count += p.count_prereqs()
+
+        return count
+
+    def find(self, code):
+        """ (Course, string) -> Course|NoneType
+        Finds a course by its code (name) within the current course tree.
+        """
+        if self.name == code:
+            return self
+
+        for p in self.prereqs:
+            out = p.find(code)
+            if out is not None:
+                return out
+
+        return None
+
     def missing_prereqs(self):
         """ (Course) -> list of str
 

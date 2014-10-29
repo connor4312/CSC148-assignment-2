@@ -69,7 +69,27 @@ class TermPlanner:
         Note that you are *NOT* required to specify why a schedule is invalid,
         though this is an interesting exercise!
         """
-        pass
+        for term in schedule:
+            for cls in term:
+                # Try to find the course in the tree. If we can't, it's
+                # not a valid prereq tree.
+                course = self.course.find(cls)
+                if course is None:
+                    return False
+
+                # If the course has already been taken, it's a duplicate!
+                if course.taken:
+                    return False
+
+                # If we can't take the course, we're missing a prerequisite.
+                if not course.is_takeable():
+                    return False
+
+                # At this point, it's a valid course, so let's take it.
+                course.take()
+
+        # If we got down to here, we're good!
+        return True
 
     def generate_schedule(self, selected_courses):
         """ (TermPlanner, list of str) -> list of (list of str)
@@ -77,4 +97,4 @@ class TermPlanner:
         Return a schedule containing the courses in selected_courses that
         satisfies the restrictions given in the assignment specification.
         """
-        pass
+

@@ -104,3 +104,36 @@ class TermPlanner:
         satisfies the restrictions given in the assignment specification.
         """
 
+        # Pick our all of our "target courses" that we want to take.
+        targets = [self.course.find(c) for c in selected_courses]
+        schedule = [[]]
+        # For every one of the targets...
+        for target in targets:
+            # Flatten the prereq tree for that course
+            courses = target.flatten()
+
+            # While our target hasn't been taken, run the loop.
+            while not target.taken:
+                to_take = []
+                # Add every course that can be taken currently to the list
+                # of courses to take.
+                for course in courses:
+                    if course.is_takeable() and not course.taken:
+                        to_take.append(course)
+
+                # Take every course we selected before, limiting the the
+                # maximum courses per term to five.
+                for course in to_take:
+                    if len(schedule[len(schedule) - 1]) < 5:
+                        schedule[len(schedule) - 1].append(course.name)
+                    else:
+                        schedule.append([course.name])
+
+                    course.take()
+
+                # Append a new empty term to the schedule, so classes in the
+                # next iteration (those we could not take this round) are
+                # added in a new term.
+                schedule.append([])
+
+        return schedule

@@ -19,7 +19,6 @@ to store prerequisite information.
 
 TermPlanner: answers queries about schedules based on prerequisite tree.
 """
-from course import Course
 from course_parser import CourseParser
 
 
@@ -45,6 +44,27 @@ def parse_course_data(filename):
     return parser.root()
 
 
+def reset_after(fn):
+    """ (Function) -> Function
+    After we generate a schedule or check the validity of a schedule,
+    some/all courses will be marked as taken. We want to reset them so as
+    not to cause issue down the line. This is a simple decorator to do that.
+    """
+    # Define the function we want to replace the original with.
+    def swapped(planner, *args):
+        # Pass through the arguments we get, intercept the output.
+        output = fn(planner, *args)
+
+        # Loop through and un-take every course in the planner tree.
+        for course in planner.course.flatten():
+            course.taken = False
+
+        # Give back the intercepted output.
+        return output
+
+    return swapped
+
+
 class TermPlanner:
     """Tool for planning course enrolment over multiple terms.
 
@@ -62,6 +82,7 @@ class TermPlanner:
         """
         self.course = parse_course_data(filename)
 
+    @reset_after
     def is_valid(self, schedule):
         """ (TermPlanner, list of (list of str)) -> bool
 
@@ -97,6 +118,7 @@ class TermPlanner:
         # If we got down to here, we're good!
         return True
 
+    @reset_after
     def generate_schedule(self, selected_courses):
         """ (TermPlanner, list of str) -> list of (list of str)
 
@@ -106,7 +128,7 @@ class TermPlanner:
 
         # Pick our all of our "target courses" that we want to take.
         targets = [self.course.find(c) for c in selected_courses]
-        schedule = [[]]
+        schedule = []
         # For every one of the targets...
         for target in targets:
             # Flatten the prereq tree for that course
@@ -115,25 +137,24 @@ class TermPlanner:
             # While our target hasn't been taken, run the loop.
             while not target.taken:
                 to_take = []
-                # Add every course that can be taken currently to the list
-                # of courses to take.
+
                 for course in courses:
+                    # Find courses that can be taken but are not, and set them
+                    # to be taken.
                     if course.is_takeable() and not course.taken:
                         to_take.append(course)
 
-                # Take every course we selected before, limiting the the
-                # maximum courses per term to five.
-                for course in to_take:
-                    if len(schedule[len(schedule) - 1]) < 5:
-                        schedule[len(schedule) - 1].append(course.name)
-                    else:
-                        schedule.append([course.name])
+                    # If we found five courses, stop searching, we'll take em.
+                    if len(to_take) >= 5:
+                        break
 
+                # Take every course we selected before. We don't take them
+                # until they're all selected, otherwise prerequisites could
+                # be taken in the same term that the course itself is!
+                for course in to_take:
                     course.take()
 
-                # Append a new empty term to the schedule, so classes in the
-                # next iteration (those we could not take this round) are
-                # added in a new term.
-                schedule.append([])
+                # Then add their names to our schedule list.
+                schedule.append([t.name for t in to_take])
 
         return schedule

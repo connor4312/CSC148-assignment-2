@@ -40,11 +40,13 @@ class TestPlanner(unittest.TestCase):
 
     def test_makes_valid_course(self):
         s = self.planner.generate_schedule(['AWE400'])
-        self.assertEqual(s[0], ['AWE100', 'AWE101', 'AWE199', 'AWE250'])
-        self.assertEqual(s[1], ['AWE200'])
-        self.assertEqual(s[2], ['AWE300'])
-        self.assertEqual(s[3], ['AWE400'])
-
+        self.assertEqual(s, [
+            ['AWE100', 'AWE101', 'AWE199', 'AWE250'],
+            ['AWE200'],
+            ['AWE300'],
+            ['AWE400']
+        ])
+        self.assertTrue(self.planner.is_valid(s))
 
 
 if __name__ == '__main__':

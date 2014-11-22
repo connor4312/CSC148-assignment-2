@@ -34,7 +34,7 @@ class TestCourseParser(unittest.TestCase):
         self.assertEqual(self.parser.checkout('Z'), self.parser.root())
 
     def test_file_parser(self):
-        root = parse_course_data('fixture.txt')
+        root = parse_course_data('fixture_1.txt')
         self.assertEqual('AWE400', root.name)
         self.assertEqual(['AWE300'], [c.name for c in root.prereqs])
         self.assertEqual(['AWE200', 'AWE250'],

@@ -1,0 +1,156 @@
+Style: 10/10
+Report was generated on: 16:42:17 - 19/11/2014
+==============================================
+
+
+test_course
+===========
+Total number of tests: 41
+    Passes: 39
+    Failures: 2
+    Errors: 0
+    Warnings: 0
+
+Test case: test_takeable_already_taken
+SUCCESS 
+Test case: test_takeable_depth_2_takeable
+SUCCESS 
+Test case: test_takeable_depth_2_untakeable
+SUCCESS 
+Test case: test_takeable_many_prereqs_all_satisfied
+SUCCESS 
+Test case: test_takeable_many_prereqs_none_satisfied
+SUCCESS 
+Test case: test_takeable_many_prereqs_some_satisfied
+SUCCESS 
+Test case: test_takeable_no_prereqs
+SUCCESS 
+Test case: test_takeable_one_prereq_satisfied
+SUCCESS 
+Test case: test_takeable_one_prereq_unsatisfied
+SUCCESS 
+Test case: test_takeable_with_parent
+SUCCESS 
+Test case: test_call_take_multiple
+SUCCESS 
+Test case: test_call_take_multiple_error
+SUCCESS 
+Test case: test_take_no_prereqs_already_taken
+SUCCESS 
+Test case: test_take_no_prereqs_not_already_taken
+SUCCESS 
+Test case: test_take_no_prereqs_parent
+SUCCESS 
+Test case: test_take_prereq_satisfied
+SUCCESS 
+Test case: test_take_prereq_unsatisfied
+SUCCESS 
+Test case: test_take_prereqs_all_satisfied
+SUCCESS 
+Test case: test_take_prereqs_some_satisfied
+SUCCESS 
+Test case: test_take_prereqs_unsatisfied
+SUCCESS 
+Test case: test_take_tree
+SUCCESS 
+Test case: test_missing_prereqs_chain
+SUCCESS 
+Test case: test_missing_prereqs_large_no_shallow
+SUCCESS 
+Test case: test_missing_prereqs_large_none
+SUCCESS 
+Test case: test_missing_prereqs_many_prereqs_all_satisfied
+SUCCESS 
+Test case: test_missing_prereqs_many_prereqs_none_satisfied
+SUCCESS 
+Test case: test_missing_prereqs_many_prereqs_none_satisfied_order
+SUCCESS 
+Test case: test_missing_prereqs_no_missing
+SUCCESS 
+Test case: test_missing_prereqs_one_missing
+SUCCESS 
+Test case: test_missing_prereqs_one_prereq_satisfied
+SUCCESS 
+Test case: test_add_prereq_duplicate
+SUCCESS 
+Test case: test_add_prereq_no_prereqs
+SUCCESS 
+Test case: test_add_prereq_to_existing_prereqs
+SUCCESS 
+Test case: test_add_prereq_with_prereqs_direct_descendant_first
+SUCCESS 
+Test case: test_add_self_as_prereq
+FAILURE: AssertionError
+PrerequisiteError not raised by add_prereq 
+Test case: test_add_self_as_prereq_children
+FAILURE: AssertionError
+PrerequisiteError not raised by add_prereq 
+Test case: test_binary_prereq_tree
+SUCCESS 
+Test case: test_unary_prereq_tree
+SUCCESS 
+Test case: test_init_no_prereq
+SUCCESS 
+Test case: test_init_with_prereq
+SUCCESS 
+Test case: test_init_with_prereq_with_prereqs
+SUCCESS 
+
+
+test_planner
+============
+Total number of tests: 49
+    Passes: 0
+    Failures: 0
+    Errors: 49
+    Warnings: 0
+
+Test case: test_big_all
+Test case: test_big_all_but_one
+Test case: test_big_levels
+Test case: test_big_some
+Test case: test_chain_all
+Test case: test_chain_some
+Test case: test_missing_prereq
+Test case: test_one_course
+Test case: test_one_prereq
+Test case: test_wide_all
+Test case: test_wide_none
+Test case: test_wide_one
+Test case: test_wide_six
+Test case: test_wide_some
+Test case: test_binary
+Test case: test_binary_order
+Test case: test_binary_simple
+Test case: test_chain2
+Test case: test_chain_long
+Test case: test_chain_order
+Test case: test_many
+Test case: test_one_three
+Test case: test_one_two_one_each
+Test case: test_two_one_each
+Test case: test_big_all_singles
+Test case: test_big_missing
+Test case: test_big_prereqs_valid
+Test case: test_chain_all
+Test case: test_chain_many
+Test case: test_chain_mixed
+Test case: test_chain_multiple
+Test case: test_chain_one
+Test case: test_multiple_good
+Test case: test_multiple_good_all
+Test case: test_prereq_in_same_term
+Test case: test_prereqs_same_term
+Test case: test_single_course
+Test case: test_single_course_not_in_tree
+Test case: test_single_invalid
+Test case: test_single_two
+Test case: test_two_courses_reverse_seq
+Test case: test_two_courses_together
+Test case: test_two_prereqs_both_missing
+Test case: test_two_prereqs_one_missing
+Test case: test_wide_all_missing
+Test case: test_wide_full
+Test case: test_wide_full_all
+Test case: test_wide_same_term
+Test case: test_wide_some_missing

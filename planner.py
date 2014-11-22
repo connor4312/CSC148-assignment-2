@@ -112,8 +112,18 @@ class TermPlanner:
         # Then, loop through every course in the tree and make sure
         # every course that is possible to take has been taken.
         for course in self.course.flatten():
-            if not course.taken and course.is_takeable():
-                return False
+            # If it's been taken, that's fine...
+            if course.taken:
+                continue
+            # If it's a leaf node, we're not required to take it.
+            if len(course.prereqs) == 0:
+                continue
+            # If it's not takeable, we don't have to take it...
+            if not course.is_takeable():
+                continue
+
+            # Otherwise, it's invalid!
+            return False
 
         # If we got down to here, we're good!
         return True

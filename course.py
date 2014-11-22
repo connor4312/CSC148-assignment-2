@@ -86,7 +86,10 @@ class Course:
         - this course already has prereq in its prerequisite tree
         """
         if self.has_prereq(prereq) or prereq.has_prereq(self):
-            raise PrerequisiteError
+            raise PrerequisiteError('Circular prereq!')
+
+        if prereq is self:
+            raise PrerequisiteError('A course cannot be its own prereq!')
 
         self.prereqs.append(prereq)
 

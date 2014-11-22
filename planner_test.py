@@ -5,7 +5,7 @@ from planner import TermPlanner
 class TestPlanner(unittest.TestCase):
 
     def setUp(self):
-        self.planner = TermPlanner('fixture.txt')
+        self.planner = TermPlanner('fixture_1.txt')
 
     def test_valid_if_valid(self):
         self.assertTrue(self.planner.is_valid([
@@ -46,6 +46,33 @@ class TestPlanner(unittest.TestCase):
             ['AWE300'],
             ['AWE400']
         ])
+        self.assertTrue(self.planner.is_valid(s))
+
+    def test_handles_multiple_in_same_tree(self):
+        s = self.planner.generate_schedule(['AWE400', 'AWE200'])
+        self.assertEqual(s, [
+            ['AWE100', 'AWE101', 'AWE199', 'AWE250'],
+            ['AWE200'],
+            ['AWE300'],
+            ['AWE400']
+        ])
+        self.assertTrue(self.planner.is_valid(s))
+
+    def test_single_course(self):
+        s = self.planner.generate_schedule(['AWE199'])
+        self.assertEqual(s, [['AWE199']])
+        self.assertTrue(self.planner.is_valid(s))
+
+    def test_course_one_prereq(self):
+        self.planner = TermPlanner('fixture_2.txt')
+        s = self.planner.generate_schedule(['A2'])
+        self.assertEqual(s, [['A1'], ['A2']])
+        self.assertTrue(self.planner.is_valid(s))
+
+    def test_course_require_both_prereq_and_self(self):
+        self.planner = TermPlanner('fixture_2.txt')
+        s = self.planner.generate_schedule(['A2', 'A1'])
+        self.assertEqual(s, [['A1'], ['A2']])
         self.assertTrue(self.planner.is_valid(s))
 
 

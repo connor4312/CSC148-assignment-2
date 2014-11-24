@@ -102,6 +102,17 @@ class TermPlanner:
         # At this point, the tree is valid.
         return True
 
+    def to_course_tree(self, schedule):
+        """ (TermPlanner, [][]str) -> [][]Course
+        Converts schedule of strings to a schedule of courses!
+        """
+        out = []
+        for term in schedule:
+            mapped = map(self.course.find, term)
+            out.append(list(mapped))
+
+        return out
+
     @reset_before
     def is_valid(self, schedule):
         """ (TermPlanner, list of (list of str)) -> bool
@@ -110,11 +121,12 @@ class TermPlanner:
         Note that you are *NOT* required to specify why a schedule is invalid,
         though this is an interesting exercise!
         """
+
+        schedule = self.to_course_tree(schedule)
+
         for term in schedule:
-            for cls in term:
-                # Try to find the course in the tree. If we can't, it's
-                # not a valid prereq tree.
-                course = self.course.find(cls)
+            for course in term:
+                # If we couldn't find the course, the schedule is invalid.
                 if course is None:
                     return False
 
@@ -126,7 +138,8 @@ class TermPlanner:
                 if not course.is_takeable():
                     return False
 
-                # At this point, it's a valid course, so let's take it.
+            # At this point, go back and "take" all courses in the term.
+            for course in term:
                 course.take()
 
         # If we got down to here, we just need to check prereqs!

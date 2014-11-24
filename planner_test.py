@@ -75,6 +75,28 @@ class TestPlanner(unittest.TestCase):
         self.assertEqual(s, [['A1'], ['A2']])
         self.assertTrue(self.planner.is_valid(s))
 
+    def test_single(self):
+        self.planner = TermPlanner('fixture_4.txt')
+        s = self.planner.generate_schedule(['A1'])
+        self.assertEqual(s, [])
+        self.assertTrue(self.planner.is_valid(s))
+
+        s = self.planner.generate_schedule(['B1'])
+        self.assertEqual(s, [['A1'], ['B1']])
+        self.assertTrue(self.planner.is_valid(s))
+
+    def test_long_trees(self):
+        self.planner = TermPlanner('fixture_5.txt')
+        s = self.planner.generate_schedule(['A5', 'B5'])
+        self.assertEqual(s, [
+            ['A1', 'B1'],
+            ['A2', 'B2'],
+            ['A3', 'B3'],
+            ['A4', 'B4'],
+            ['A5', 'B5']
+        ])
+        self.assertTrue(self.planner.is_valid(s))
+
 
 if __name__ == '__main__':
     unittest.main(exit=False)

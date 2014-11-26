@@ -6,7 +6,7 @@
 # STUDENT INFORMATION
 #
 # List your group members below, one per line, in format
-# <full name>, <utorid>
+# Connor Peet, 100108820
 #
 #
 #
@@ -79,7 +79,7 @@ class TermPlanner:
         """
         self.course = parse_course_data(filename)
 
-    def check_taken_after_prereqs(self):
+    def _check_taken_after_prereqs(self):
         """ (TermPlanner) -> bool
         This checks to make sure that all courses are taken after their
         prereqs are taken. That is, for all leaf nodes in the prereq tree,
@@ -113,6 +113,65 @@ class TermPlanner:
 
         return out
 
+    def _extract_prereqs(self, targets):
+        """ (TermPlanner, []str) -> []Course
+        Returns a list containing all prereqs of every target and the
+        targets themselves.
+        """
+
+        courses = []
+        # Loop through every course we selected that we want to take...
+        for target in [self.course.find(c) for c in targets]:
+            # Loop through that course and their prereq
+            for item in target.flatten():
+                # Add that to the list of courses we want to take, if
+                # it isn't already in there.
+                if item not in courses:
+                    courses.append(item)
+
+        return courses
+
+    def _place_in_schedule(self, schedule, course):
+        """ (TermPlanner, [][]Course, Course) -> NoneType
+        Places the course in the schedule as "deep" as it is able to go - the
+        last term if possible or, if full, it creates a new term.
+        """
+        if len(schedule[-1]) >= 5:
+            schedule.append([course.name])
+        else:
+            schedule[-1].append(course.name)
+
+    def _add_possible_to_schedule(self, schedule, courses):
+        """ (TermPlanner, [][]Course, []Course) -> NoneType
+        Adds all courses we can from the "courses" list into the schedule,
+        for the "current" term; this basically adds one level of prereqs
+        onto the schedule.
+        """
+        # Loop through all the courses so long as we're still taking
+        # courses! When the number_taken is zero after an entire
+        # iteration, then we need to append a new term and start
+        # adding courses there.
+        in_schedule = []
+        count_taken = -1
+        while count_taken != len(in_schedule):
+            count_taken = len(in_schedule)
+
+            # Take courses that are not already taken but are available.
+            for course in courses:
+                if course.taken or not course.is_takeable():
+                    continue
+                if course in in_schedule:
+                    continue
+
+                self._place_in_schedule(schedule, course)
+                in_schedule.append(course)
+
+        # Mark all courses up to this point to be taken. We don't do this
+        # until we tried every course, otherwise we'd place prereqs in
+        # the same semester as their parent courses!
+        for course in in_schedule:
+            course.take()
+
     @reset_before
     def is_valid(self, schedule):
         """ (TermPlanner, list of (list of str)) -> bool
@@ -143,66 +202,7 @@ class TermPlanner:
                 course.take()
 
         # If we got down to here, we just need to check prereqs!
-        return self.check_taken_after_prereqs()
-
-    def extract_prereqs(self, targets):
-        """ (TermPlanner, []str) -> []Course
-        Returns a list containing all prereqs of every target and the
-        targets themselves.
-        """
-
-        courses = []
-        # Loop through every course we selected that we want to take...
-        for target in [self.course.find(c) for c in targets]:
-            # Loop through that course and their prereq
-            for item in target.flatten():
-                # Add that to the list of courses we want to take, if
-                # it isn't already in there.
-                if item not in courses:
-                    courses.append(item)
-
-        return courses
-
-    def place_in_schedule(self, schedule, course):
-        """ (TermPlanner, [][]Course, Course) -> NoneType
-        Places the course in the schedule as "deep" as it is able to go - the
-        last term if possible or, if full, it creates a new term.
-        """
-        if len(schedule[-1]) >= 5:
-            schedule.append([course.name])
-        else:
-            schedule[-1].append(course.name)
-
-    def add_possible_to_schedule(self, schedule, courses):
-        """ (TermPlanner, [][]Course, []Course) -> NoneType
-        Adds all courses we can from the "courses" list into the schedule,
-        for the "current" term; this basically adds one level of prereqs
-        onto the schedule.
-        """
-        # Loop through all the courses so long as we're still taking
-        # courses! When the number_taken is zero after an entire
-        # iteration, then we need to append a new term and start
-        # adding courses there.
-        in_schedule = []
-        count_taken = -1
-        while count_taken != len(in_schedule):
-            count_taken = len(in_schedule)
-
-            # Take courses that are not already taken but are available.
-            for course in courses:
-                if course.taken or not course.is_takeable():
-                    continue
-                if course in in_schedule:
-                    continue
-
-                self.place_in_schedule(schedule, course)
-                in_schedule.append(course)
-
-        # Mark all courses up to this point to be taken. We don't do this
-        # until we tried every course, otherwise we'd place prereqs in
-        # the same semester as their parent courses!
-        for course in in_schedule:
-            course.take()
+        return self._check_taken_after_prereqs()
 
     @reset_before
     def generate_schedule(self, selected_courses):
@@ -213,7 +213,7 @@ class TermPlanner:
         """
 
         # Pick our all of our "target courses" that we want to take.
-        courses = self.extract_prereqs(selected_courses)
+        courses = self._extract_prereqs(selected_courses)
 
         # Define the base schedule
         schedule = [[]]
@@ -221,7 +221,7 @@ class TermPlanner:
         # While there is any course not taken...
         while any(not course.taken for course in courses):
             # Add all the courses we can to the schedule
-            self.add_possible_to_schedule(schedule, courses)
+            self._add_possible_to_schedule(schedule, courses)
             # Then append a new term for courses to be added to.
             schedule.append([])
 

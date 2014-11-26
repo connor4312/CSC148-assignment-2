@@ -6,7 +6,7 @@
 # STUDENT INFORMATION
 #
 # List your group members below, one per line, in format
-# <full name>, <utorid>
+# Connor Peet, 100108820
 #
 #
 #

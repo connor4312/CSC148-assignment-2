@@ -1,4 +1,4 @@
-# Assignment 2 - Unit Tests for Course
+# Assignment 2 - Course Planning!
 #
 # CSC148 Fall 2014, University of Toronto
 # Instructor: David Liu
@@ -6,7 +6,7 @@
 # STUDENT INFORMATION
 #
 # List your group members below, one per line, in format
-# <full name>, <utorid>
+# Connor Peet, 100108820
 #
 #
 #

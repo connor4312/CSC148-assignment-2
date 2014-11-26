@@ -1,3 +1,17 @@
+# Assignment 2 - Course Planning!
+#
+# CSC148 Fall 2014, University of Toronto
+# Instructor: David Liu
+# ---------------------------------------------
+# STUDENT INFORMATION
+#
+# List your group members below, one per line, in format
+# Connor Peet, 100108820
+#
+#
+#
+# ---------------------------------------------
+
 from course import Course
 
 
@@ -6,6 +20,10 @@ class CourseParser():
     The CourseParser is responsible for building course trees. Courses can be
     added by code to it, with a prerequisite, and they are then built into
     a proper tree.
+
+
+    Attributes:
+        - (dict) -> course
     """
 
     def __init__(self):
@@ -31,7 +49,8 @@ class CourseParser():
 
     def root(self):
         """ (CourseParser) -> Course
-        Returns the root course of the tree.
+        Returns the root course of the tree by iterating through the tree
+        and removing items which appear as a subtree of another.
         """
         # Get a list of the course objects.
         hitlist = list(self.courses.values())
